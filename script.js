@@ -37,8 +37,56 @@ const arrOfQuestions = [
   "Whoever has ever tried to convince someone with ‘ek aur le lo na, kal gym kar lenge,’ drink up!",
 ];
 console.log("hello");
+// function showRandomQuestion() {
+//   const i = Math.floor(Math.random() * arrOfQuestions.length);
+//   const questionElement = document.getElementById("question");
+//   questionElement.textContent = arrOfQuestions[i];
+// }
+
+let players = [];
+const footer = document.getElementById("footer");
+
 function showRandomQuestion() {
   const i = Math.floor(Math.random() * arrOfQuestions.length);
-  const questionElement = document.getElementById("question");
-  questionElement.textContent = arrOfQuestions[i];
+  document.getElementById("question").textContent = arrOfQuestions[i];
+}
+
+function addPlayer() {
+  const playerNameInput = document.getElementById("playerName");
+  const errorMessage = document.getElementById("error");
+
+  if (!playerNameInput.value.trim()) {
+    errorMessage.textContent = "Player name cannot be empty!";
+    return;
+  }
+
+  // Add player to list and set default score
+  players.push({ name: playerNameInput.value.trim(), score: 1 });
+  playerNameInput.value = "";
+  errorMessage.textContent = "";
+
+  // Update footer
+  renderFooter();
+}
+
+function updateScore(playerIndex, change) {
+  players[playerIndex].score += change;
+  renderFooter();
+}
+
+function renderFooter() {
+  footer.innerHTML = ""; // Clear previous content
+
+  players.forEach((player, index) => {
+    const playerDiv = document.createElement("div");
+    playerDiv.className = "player";
+
+    playerDiv.innerHTML = `
+      <span>${player.name}: ${player.score}</span>
+      <button class="score-button increase" onclick="updateScore(${index}, 1)">+1</button>
+      <button class="score-button decrease" onclick="updateScore(${index}, -1)">-1</button>
+    `;
+
+    footer.appendChild(playerDiv);
+  });
 }
