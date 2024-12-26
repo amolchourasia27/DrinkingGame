@@ -8,11 +8,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --question-bg: #334155;
+            --text: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
         }
 
         * {
@@ -36,7 +38,7 @@
         .container {
             width: 100%;
             max-width: 600px;
-            background: white;
+            background: var(--card-bg);
             padding: 2rem;
             border-radius: 1.5rem;
             box-shadow: var(--shadow);
@@ -57,7 +59,7 @@
             justify-content: center;
             text-align: center;
             padding: 1rem;
-            background: var(--bg);
+            background: var(--question-bg);
             border-radius: 1rem;
             line-height: 1.4;
         }
@@ -112,7 +114,7 @@
 <body>
     <div class="container">
         <div class="question" id="question">Tap the button below to see your question</div>
-        <button onclick="showRandomQuestion()">Next Question</button>
+        <button onclick=showRandomQuestion()>Show Question</button>
     </div>
     <script src="script.js"></script>
 </body>
