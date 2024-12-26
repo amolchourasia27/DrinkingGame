@@ -3,24 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <title>Dark Mode Game</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #8b5cf6;
-            --primary-dark: #7c3aed;
             --bg: #0f172a;
             --card-bg: #1e293b;
-            --question-bg: #334155;
+            --input-bg: #334155;
             --text: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --success: #10b981;
+            --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: -webkit-fill-available;
         }
 
         body {
@@ -28,39 +37,42 @@
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+            min-height: -webkit-fill-available;
             line-height: 1.5;
+            padding-bottom: calc(80px + var(--safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
-            width: 100%;
-            max-width: 600px;
+            width: min(90%, 600px);
+            margin: 1rem auto;
+            padding: clamp(1rem, 3vw, 2rem);
             background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1.5rem;
+            border-radius: clamp(1rem, 2vw, 1.5rem);
             box-shadow: var(--shadow);
             transition: transform 0.2s ease;
         }
 
-        .container:hover {
-            transform: translateY(-2px);
+        @supports (backdrop-filter: blur(10px)) {
+            .container {
+                background: rgba(30, 41, 59, 0.8);
+                backdrop-filter: blur(10px);
+            }
         }
 
         .question {
-            font-size: clamp(1.25rem, 4vw, 1.875rem);
+            font-size: clamp(1rem, 3.5vw, 1.875rem);
             font-weight: 600;
-            margin-bottom: 2rem;
-            min-height: 100px;
+            margin: 1rem 0;
+            min-height: clamp(80px, 15vh, 120px);
+            padding: clamp(0.75rem, 2vw, 1.5rem);
+            background: var(--input-bg);
+            border-radius: clamp(0.75rem, 1.5vw, 1rem);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 1rem;
-            background: var(--question-bg);
-            border-radius: 1rem;
             line-height: 1.4;
         }
 
@@ -68,44 +80,152 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.125rem;
+            padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+            font-size: clamp(0.875rem, 2.5vw, 1.125rem);
             font-weight: 500;
-            border-radius: 1rem;
+            border-radius: clamp(0.75rem, 1.5vw, 1rem);
             cursor: pointer;
             transition: all 0.2s ease;
             width: 100%;
-            max-width: 300px;
+            max-width: min(300px, 80%);
             font-family: inherit;
+            touch-action: manipulation;
         }
 
-        button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+        @media (hover: hover) {
+            button:hover {
+                background: var(--primary-dark);
+                transform: translateY(-1px);
+            }
         }
 
         button:active {
             transform: translateY(1px);
         }
 
-        @media (hover: none) {
-            button:hover {
-                background: var(--primary);
+        h3 {
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+            font-size: clamp(1.125rem, 3vw, 1.25rem);
+        }
+
+        input {
+            width: 100%;
+            padding: clamp(0.75rem, 2vw, 1rem);
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: clamp(0.75rem, 1.5vw, 1rem);
+            color: var(--text);
+            margin-bottom: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: var(--card-bg);
+            padding: clamp(0.75rem, 2vw, 1rem);
+            padding-bottom: calc(clamp(0.75rem, 2vw, 1rem) + var(--safe-area-inset-bottom));
+            box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+            display: flex;
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            z-index: 1000;
+        }
+
+        .footer::-webkit-scrollbar {
+            display: none;
+        }
+
+        .player {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1.5vw, 0.75rem);
+            padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+            background: var(--input-bg);
+            border-radius: clamp(0.75rem, 1.5vw, 1rem);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .score-button {
+            padding: clamp(0.375rem, 1vw, 0.5rem) clamp(0.75rem, 1.5vw, 1rem);
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            border-radius: clamp(0.5rem, 1vw, 0.75rem);
+            color: white;
+            transition: transform 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .increase {
+            background: var(--success);
+        }
+
+        .decrease {
+            background: var(--danger);
+        }
+
+        #error {
+            color: var(--danger);
+            font-size: clamp(0.75rem, 2vw, 0.875rem);
+            margin-top: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+                padding-bottom: calc(100px + var(--safe-area-inset-bottom));
+            }
+
+            .container {
+                margin: 2rem auto;
+            }
+
+            .footer {
+                justify-content: center;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 1024px) {
             .container {
-                padding: 1.5rem;
+                margin: 3rem auto;
             }
 
-            .question {
-                min-height: 80px;
-                padding: 0.75rem;
+            .player {
+                transition: transform 0.2s ease;
             }
 
-            button {
-                padding: 0.875rem 1.75rem;
+            .player:hover {
+                transform: translateY(-2px);
+            }
+        }
+
+        @media print {
+            .footer {
+                position: static;
+                break-inside: avoid;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
             }
         }
     </style>
@@ -113,9 +233,19 @@
 
 <body>
     <div class="container">
-        <div class="question" id="question">Tap the button below to see your question</div>
-        <button onclick=showRandomQuestion()>Show Question</button>
+        <div class="question" id="question">Click "Show Question" to start!</div>
+        <button onclick="showRandomQuestion()">Show Question</button>
     </div>
+
+    <div id="playerSetup" class="container">
+        <h3>Add Players</h3>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button onclick="addPlayer()">Add Player</button>
+        <p id="error"></p>
+    </div>
+
+    <div class="footer" id="footer"></div>
+
     <script src="script.js"></script>
 </body>
 
