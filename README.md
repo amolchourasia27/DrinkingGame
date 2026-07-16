@@ -7,7 +7,7 @@ A small party game for random prompts and quick score tracking. Open it on a pho
 ## Screenshots
 
 <p align="center">
-  <img src="amolchourasia27/DrinkingGame/assets/img1.png" alt="Party Shots on a phone" width="220">
+  <img src="assets/img1.png" alt="Party Shots on a phone" width="220">
   <img src="assets/img2.png" alt="Party Shots player scores" width="220">
 </p>
 
