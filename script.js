@@ -3,7 +3,7 @@ const arrOfQuestions = [
   "If your Insta bio says ‘wanderlust’ or ‘foodie,’ pee lo! (water or whatever).",
   "Aapki group mein jo banda ‘galeech’ jokes banata hai, drink!",
   "Jo banda ‘Kota Factory’ binge-watcher hai, unko treat kar do with a sip!",
-  "If you’ve ever shouted ‘bhenchod!’ in front of your family during a cricket match, bottoms up!",
+  "If you’ve ever shouted in front of your family during a cricket match, bottoms up!",
   "The person with the most unread WhatsApp chats, drink one!",
   "Sabse zyada ‘reels’ banane wala banda, apna token sip le!",
   "Anyone who can perfectly mimic ‘DDLJ ka train scene,’ take two sips!",
@@ -36,57 +36,95 @@ const arrOfQuestions = [
   "If you’ve ever stayed up all night just to watch cricket, sip it up!",
   "Whoever has ever tried to convince someone with ‘ek aur le lo na, kal gym kar lenge,’ drink up!",
 ];
-console.log("hello");
-// function showRandomQuestion() {
-//   const i = Math.floor(Math.random() * arrOfQuestions.length);
-//   const questionElement = document.getElementById("question");
-//   questionElement.textContent = arrOfQuestions[i];
-// }
 
 let players = [];
-const footer = document.getElementById("footer");
+let lastIndex = -1;
+const playersGrid = document.getElementById("playersGrid");
+const emptyState = document.getElementById("emptyState");
 
 function showRandomQuestion() {
-  const i = Math.floor(Math.random() * arrOfQuestions.length);
-  document.getElementById("question").textContent = arrOfQuestions[i];
+  let i;
+  do {
+    i = Math.floor(Math.random() * arrOfQuestions.length);
+  } while (i === lastIndex && arrOfQuestions.length > 1);
+  lastIndex = i;
+
+  const el = document.getElementById("question");
+
+  el.classList.remove("fade-in");
+  void el.offsetWidth; // trigger reflow
+
+  el.textContent = arrOfQuestions[i];
+  el.classList.add("fade-in");
 }
 
 function addPlayer() {
   const playerNameInput = document.getElementById("playerName");
   const errorMessage = document.getElementById("error");
+  const name = playerNameInput.value.trim();
 
-  if (!playerNameInput.value.trim()) {
+  if (!name) {
     errorMessage.textContent = "Player name cannot be empty!";
     return;
   }
+  if (players.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
+    errorMessage.textContent = "Player already in the game!";
+    return;
+  }
 
-  // Add player to list and set default score
-  players.push({ name: playerNameInput.value.trim(), score: 1 });
+  players.push({ name: name, score: 0 });
   playerNameInput.value = "";
   errorMessage.textContent = "";
-
-  // Update footer
-  renderFooter();
+  renderPlayers();
 }
 
 function updateScore(playerIndex, change) {
-  players[playerIndex].score += change;
-  renderFooter();
+  players[playerIndex].score = Math.max(0, players[playerIndex].score + change);
+
+  const scoreEl = document.getElementById(`score-${playerIndex}`);
+  if (scoreEl) {
+    scoreEl.textContent = players[playerIndex].score;
+    scoreEl.classList.remove("pop-in");
+    void scoreEl.offsetWidth;
+    scoreEl.classList.add("pop-in");
+  } else {
+    renderPlayers();
+  }
 }
 
-function renderFooter() {
-  footer.innerHTML = ""; // Clear previous content
+function renderPlayers() {
+  playersGrid.innerHTML = ""; // Clear everything including empty state
+
+  if (players.length === 0) {
+    // If no players, put the empty state back
+    playersGrid.appendChild(emptyState);
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none"; // Hide it when we have players
 
   players.forEach((player, index) => {
-    const playerDiv = document.createElement("div");
-    playerDiv.className = "player";
+    const tile = document.createElement("div");
+    tile.className = "player-tile pop-in";
+    tile.style.animationDelay = `${index * 0.05}s`;
 
-    playerDiv.innerHTML = `
-      <span>${player.name}: ${player.score}</span>
-      <button class="score-button increase" onclick="updateScore(${index}, 1)">+1</button>
-      <button class="score-button decrease" onclick="updateScore(${index}, -1)">-1</button>
+    tile.innerHTML = `
+      <div class="player-name" title="${player.name}">${player.name}</div>
+      <div class="player-score" id="score-${index}">${player.score}</div>
+      <div class="score-controls">
+        <button class="score-btn score-down" onclick="updateScore(${index}, -1)">-</button>
+        <button class="score-btn score-up" onclick="updateScore(${index}, 1)">+</button>
+      </div>
     `;
-
-    footer.appendChild(playerDiv);
+    playersGrid.appendChild(tile);
   });
 }
+
+// Allow pressing Enter to add a player
+document.getElementById("playerName").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addPlayer();
+  }
+});

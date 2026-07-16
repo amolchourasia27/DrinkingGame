@@ -1,0 +1,383 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg-dark: #130b20;
+  --bg-gradient: linear-gradient(135deg, #1f0b3b 0%, #0d0614 100%);
+  --card-bg: rgba(30, 20, 50, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --text: #f8f9fa;
+  --text-muted: #a89bc0;
+  --primary: #ff0055;
+  --primary-glow: rgba(255, 0, 85, 0.5);
+  --accent: #00e5ff;
+  --accent-glow: rgba(0, 229, 255, 0.5);
+  --yellow: #ffd000;
+  --success: #00e676;
+  --danger: #ff1744;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  color: var(--text);
+  background: var(--bg-dark);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+}
+
+.bg-animated {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-gradient);
+}
+
+.bg-animated::before,
+.bg-animated::after {
+  content: '';
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: pulse 10s infinite alternate;
+}
+
+.bg-animated::before {
+  top: -10vw;
+  left: -10vw;
+  background: var(--primary);
+}
+
+.bg-animated::after {
+  bottom: -10vw;
+  right: -10vw;
+  background: var(--accent);
+  animation-delay: -5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  100% {
+    transform: scale(1.2) translate(5%, 5%);
+  }
+}
+
+.app-container {
+  width: min(95%, 800px);
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  text-align: center;
+  padding: 1rem 0 1.5rem;
+}
+
+.topbar h1 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  letter-spacing: 2px;
+  background: linear-gradient(to right, var(--yellow), var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+.tagline {
+  color: var(--accent);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  opacity: 0.9;
+}
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .game-area {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .question-card,
+  .players-card {
+    flex: 1;
+  }
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.question-card {
+  justify-content: space-between;
+}
+
+.question-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  margin-bottom: 1.5rem;
+}
+
+.question {
+  font-size: clamp(1.25rem, 4vw, 2.25rem);
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+  font-family: 'Luckiest Guy', cursive;
+  border: none;
+  cursor: pointer;
+  border-radius: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-massive {
+  width: 100%;
+  padding: 1.25rem;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #ff00a0);
+  color: white;
+  box-shadow: 0 8px 20px var(--primary-glow), inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px var(--accent-glow), inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.players-card {
+  gap: 1rem;
+}
+
+.players-header h3 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.5rem;
+  color: var(--yellow);
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  flex: 1;
+  align-content: start;
+  overflow-y: auto;
+  max-height: 40vh;
+  padding-right: 0.5rem;
+}
+
+/* Custom Scrollbar for players grid */
+.players-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.players-grid::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.players-grid::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.player-tile {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.player-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-score {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 2rem;
+  color: var(--yellow);
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.score-controls {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.score-btn {
+  flex: 1;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.1s;
+}
+
+.score-btn:active {
+  transform: scale(0.9);
+}
+
+.score-up {
+  background: var(--success);
+  box-shadow: 0 3px 0 rgba(0, 150, 0, 0.5);
+}
+
+.score-down {
+  background: var(--danger);
+  box-shadow: 0 3px 0 rgba(150, 0, 0, 0.5);
+}
+
+.add-player-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--card-border);
+}
+
+.add-player-row input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.add-player-row input:focus {
+  border-color: var(--accent);
+}
+
+#error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  min-height: 1.2em;
+  text-align: center;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pop-in {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
